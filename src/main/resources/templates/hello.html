@@ -8,7 +8,10 @@
     <title>Document</title>
 </head>
 <body>
-    <p>home</p>
-    <p><a href="/login">login</a></p>
+    <h1>Chỉ những ai đăng nhập mới truy cập được trang này!</h1>
+
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
 </body>
 </html>
