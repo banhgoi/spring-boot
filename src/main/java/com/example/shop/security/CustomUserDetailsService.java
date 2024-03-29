@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
@@ -22,8 +24,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new CustomUserDetails(user);
     }
 
-//    public static void main(String[] args) {
-//        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//        System.out.println(passwordEncoder.encode("admin123"));
-//    }
+    // JWTAuthenticationFilter sẽ sử dụng hàm này
+    @Transactional
+    public UserDetails loadUserById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new UsernameNotFoundException("User not found with id : " + id)
+        );
+
+        return new CustomUserDetails(user);
+    }
 }
