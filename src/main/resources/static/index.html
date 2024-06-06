@@ -1,31 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>WebSocket Test</title>
-    <script src="https://cdn.jsdelivr.net/sockjs/1.0.3/sockjs.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+    <title>WebSocket with Spring Boot</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body>
-<h1>WebSocket Test</h1>
+<h1>WebSocket with Spring Boot</h1>
 <script type="text/javascript">
-    var socket = new SockJS('/websocket');
+    var socket = new SockJS('http://localhost:8080/ws');
     var stompClient = Stomp.over(socket);
 
-    stompClient.connect({}, function(frame) {
+    stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/public', function(messageOutput) {
-            console.log(messageOutput.body);
-        });
+        stompClient.subscribe('/topic/user/1', function (message) {
+                console.log(JSON.parse(message.body));
+            });
     });
-
-    function sendMessage() {
-        var message = {
-            'content': 'Hello World',
-            'sender': 'User'
-        };
-        stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(message));
-    }
 </script>
-<button onclick="sendMessage()">Send Message</button>
 </body>
 </html>
